@@ -1,100 +1,143 @@
+/* tarot-africain.css */
+
+/* Reset et styles de base */
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #2c3e50, #34495e, #2c3e50);
-  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  margin: 20px;
+  color: #333;
+}
+
+h1, h2, h3 {
   text-align: center;
-  min-height: 100vh;
-  margin: 0;
-  padding: 20px;
-}
-
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-}
-
-h2 {
-  margin-top: 40px;
-  font-size: 1.8rem;
-  border-bottom: 2px solid rgba(255,255,255,0.2);
-  display: inline-block;
-  padding-bottom: 5px;
-}
-
-/* Conteneur principal */
-.game-container {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 15px;
-  padding: 20px;
-  max-width: 800px;
-  margin: 20px auto;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-/* Table des scores */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-}
-
-th {
-  background: rgba(255,255,255,0.1);
-}
-
-/* Inputs et boutons */
-input[type="number"] {
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-  margin: 5px;
-  text-align: center;
-  width: 80px;
+  color: #2c3e50;
 }
 
 .btn {
-  background: #3498db;
+  background-color: #2980b9;
   color: white;
   border: none;
-  padding: 12px 20px;
-  margin: 10px;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 10px 18px;
+  margin: 10px 5px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: inline-block;
 }
 
 .btn:hover {
-  background: #2980b9;
+  background-color: #3498db;
 }
 
-.btn-danger {
-  background: #e74c3c;
-}
-
-.btn-danger:hover {
-  background: #c0392b;
-}
-
-/* Résultat final */
-.final-scoreboard {
-  background: rgba(0,0,0,0.4);
-  border: 2px solid rgba(255,255,255,0.2);
+/* Configuration section */
+#setup {
+  max-width: 450px;
+  margin: 0 auto 30px;
   padding: 20px;
-  border-radius: 15px;
-  margin-top: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-.button-group {
+#player-selection {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: 600;
+}
+
+input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  margin-left: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Game section */
+#game {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  background-color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Score table */
+#score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+#score-table th,
+#score-table td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: center;
+  font-weight: 600;
+}
+
+#score-table th {
+  background-color: #2980b9;
+  color: white;
+}
+
+#score-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Round form */
+#round-form {
+  margin-bottom: 20px;
+}
+
+#round-inputs {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
+}
+
+#round-inputs input[type="number"] {
+  width: 70px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Status message */
+#status {
+  text-align: center;
+  font-weight: 600;
+  color: #27ae60;
+  margin-top: 15px;
+}
+
+/* End game section */
+#end-game {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+#final-ranking {
+  padding-left: 20px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+#final-ranking li {
+  font-weight: 600;
+  margin-bottom: 8px;
 }

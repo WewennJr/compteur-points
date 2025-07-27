@@ -7,28 +7,31 @@
 </head>
 <body>
 
-  <h1>🎲 Compteur de Points</h1>
+  <div class="container">
+    <h1>🎲 Compteur de Points</h1>
 
-  <!-- Liste des jeux -->
-  <h2>Choisir un jeu</h2>
-  <ul id="gameList">
-    <li><a href="jeux/tarot-africain.html">Tarot Africain</a></li>
-    <!-- On pourra en ajouter d'autres -->
-  </ul>
+    <h2>Choisir un jeu</h2>
+    <ul id="gameList">
+      <li><a href="jeux/tarot-africain.html" class="game-link">Tarot Africain</a></li>
+      <!-- Tu pourras en ajouter d'autres ici -->
+    </ul>
 
-  <!-- Bouton paramètres -->
-  <button id="settingsBtn">⚙️ Paramètres joueurs</button>
+    <button id="settingsBtn" class="btn">⚙️ Paramètres joueurs</button>
+  </div>
 
-  <!-- Fenêtre modale pour gérer les joueurs -->
+  <!-- Fenêtre modale -->
   <div id="settingsModal" class="modal">
     <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
       <h2>Liste des joueurs</h2>
       <ul id="playerList"></ul>
 
-      <input type="text" id="newPlayer" placeholder="Nom du joueur">
-      <button onclick="addPlayer()">Ajouter</button>
-      <br><br>
-      <button onclick="closeModal()">Fermer</button>
+      <div class="add-player">
+        <input type="text" id="newPlayer" placeholder="Nom du joueur">
+        <button class="btn small" onclick="addPlayer()">Ajouter</button>
+      </div>
+
+      <button class="btn secondary" onclick="closeModal()">Fermer</button>
     </div>
   </div>
 

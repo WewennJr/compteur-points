@@ -33,6 +33,16 @@ h2 {
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
+/* Cacher les sections de jeu par défaut */
+#game, #end-game {
+  display: none;
+}
+
+/* Cacher le bouton nouvelle manche par défaut */
+#new-round {
+  display: none;
+}
+
 /* Table des scores */
 table {
   width: 100%;
@@ -47,6 +57,11 @@ th, td {
 
 th {
   background: rgba(255,255,255,0.1);
+}
+
+.eliminated {
+  color: #e74c3c;
+  font-style: italic;
 }
 
 /* Inputs et boutons */

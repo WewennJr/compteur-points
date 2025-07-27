@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Tarot Africain</title>
-  <link rel="stylesheet" href="../css/tarot-africain.css">
+  <link rel="stylesheet" href="../css/tarot-africain.css" />
 </head>
 <body>
   <h1>Tarot Africain</h1>
 
   <!-- Choix des joueurs -->
-  <div id="setup">
+  <div id="setup" class="game-container">
     <h2>Configuration</h2>
     <div id="player-selection"></div>
-    <label>Score de départ : <input type="number" id="start-score" value="20"></label>
+    <label>Score de départ : <input type="number" id="start-score" value="20" /></label>
     <button class="btn" id="start-game">Démarrer la partie</button>
   </div>
 
   <!-- Tableau des scores -->
-  <div id="game" style="display:none;">
+  <div id="game" class="game-container" style="display:none;">
     <h2>Scores</h2>
     <table id="score-table"></table>
 
@@ -28,12 +28,12 @@
       <button class="btn" id="validate-round">Valider la manche</button>
     </div>
 
-    <button class="btn" id="new-round">Nouvelle manche</button>
+    <button class="btn" id="new-round" style="display:none;">Nouvelle manche</button>
     <div id="status"></div>
   </div>
 
   <!-- Classement final -->
-  <div id="end-game" style="display:none;">
+  <div id="end-game" class="game-container" style="display:none;">
     <h2>Classement final</h2>
     <ol id="final-ranking"></ol>
     <button class="btn" onclick="location.reload()">Nouvelle partie</button>

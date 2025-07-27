@@ -29,6 +29,7 @@ function showPlayerSelection() {
 
 // --- Démarrer la partie ---
 function startGame() {
+  console.log("Démarrage de la partie");
   const checkboxes = document.querySelectorAll("#player-selection input:checked");
   activePlayers = Array.from(checkboxes).map(c => c.value);
 
@@ -50,7 +51,12 @@ function startGame() {
 
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
+
+  // Affiche le bouton nouvelle manche et status
   document.getElementById("new-round").style.display = "inline-block";
+  document.getElementById("status").textContent = "Cliquez sur 'Nouvelle manche' pour commencer.";
+  roundPending = false;
+  console.log("Bouton nouvelle manche affiché");
 }
 
 // --- Mettre à jour le tableau des scores ---
@@ -58,8 +64,9 @@ function updateScoreTable() {
   const table = document.getElementById("score-table");
   table.innerHTML = "";
 
+  // Ligne d'entête
   const headerRow = document.createElement("tr");
-  headerRow.appendChild(document.createElement("th"));
+  headerRow.appendChild(document.createElement("th")); // case vide en haut à gauche
   activePlayers.forEach(p => {
     const th = document.createElement("th");
     th.textContent = p + (eliminated[p] ? " (Éliminé)" : "");
@@ -68,6 +75,7 @@ function updateScoreTable() {
   });
   table.appendChild(headerRow);
 
+  // Nombre de manches max (longueur max dans scores)
   const maxRounds = Math.max(...Object.values(scores).map(s => s.length));
 
   for (let r = 0; r < maxRounds; r++) {
@@ -86,6 +94,7 @@ function updateScoreTable() {
     table.appendChild(row);
   }
 
+  // Ligne des totaux
   const totalRow = document.createElement("tr");
   const totalLabel = document.createElement("td");
   totalLabel.textContent = "Total";
@@ -110,6 +119,7 @@ function showRoundForm() {
   activePlayers.forEach(p => {
     if (!eliminated[p]) {
       const label = document.createElement("label");
+      label.style.marginRight = "10px";
       label.innerHTML = `<span>${p}</span> <input type="number" min="0" value="0" name="${p}">`;
       form.appendChild(label);
     }
@@ -117,75 +127,89 @@ function showRoundForm() {
 
   document.getElementById("round-form").style.display = "block";
   document.getElementById("new-round").style.display = "none";
-  roundPending = true;
-  document.getElementById("status").textContent = "Entrez les scores de la manche puis validez.";
+  document.getElementById("status").textContent = "Remplis les scores de la manche puis valide.";
 }
 
-// --- Valider la nouvelle manche ---
+// --- Valider une manche ---
 function validateRound() {
-  if (!roundPending) {
-    alert("Cliquez sur 'Nouvelle manche' pour commencer.");
-    return;
+  if (roundPending) return; // Empêche double validation
+  roundPending = true;
+
+  const form = document.getElementById("round-inputs");
+  const inputs = form.querySelectorAll("input");
+  const roundScores = {};
+
+  for (const input of inputs) {
+    let val = parseInt(input.value);
+    if (isNaN(val) || val < 0) {
+      alert("Scores invalides. Veuillez entrer des nombres positifs.");
+      roundPending = false;
+      return;
+    }
+    roundScores[input.name] = val;
   }
 
-  const inputs = document.querySelectorAll("#round-inputs input");
-  let sum = 0;
-  inputs.forEach(input => {
-    sum += parseInt(input.value) || 0;
-  });
-
-  if (sum !== 10) {
-    alert("La somme des points doit être égale à 10 !");
-    return;
-  }
-
-  inputs.forEach(input => {
-    const p = input.name;
-    const val = parseInt(input.value) || 0;
-    scores[p].push(val);
-  });
-
-  // Met à jour élimination si total >= 40
+  // Ajouter les scores à chaque joueur actif
   activePlayers.forEach(p => {
-    const total = scores[p].reduce((a, b) => a + b, 0);
-    if (total >= 40) eliminated[p] = true;
+    if (!eliminated[p]) {
+      scores[p].push(roundScores[p] || 0);
+    } else {
+      // Joueurs éliminés ne changent plus
+      scores[p].push(scores[p][scores[p].length -1]);
+    }
+  });
+
+  // Éliminer joueurs avec total <= 0
+  activePlayers.forEach(p => {
+    const total = scores[p].reduce((a,b) => a + b, 0);
+    if (total <= 0 && !eliminated[p]) {
+      eliminated[p] = true;
+      alert(`Le joueur ${p} est éliminé !`);
+    }
   });
 
   updateScoreTable();
   document.getElementById("round-form").style.display = "none";
+  document.getElementById("new-round").style.display = "inline-block";
 
-  checkEndGame();
-}
-
-// --- Vérifier fin de partie ---
-function checkEndGame() {
-  const stillAlive = activePlayers.filter(p => !eliminated[p]);
-  if (stillAlive.length === 1) {
-    const winner = stillAlive[0];
-    document.getElementById("final-ranking").innerHTML = `<li>${winner} (Gagnant !)</li>`;
-    document.getElementById("game").style.display = "none";
-    document.getElementById("end-game").style.display = "block";
-    document.getElementById("new-round").style.display = "none";
-    document.getElementById("status").textContent = "";
-    roundPending = false;
+  // Vérifier si la partie est finie
+  const remaining = activePlayers.filter(p => !eliminated[p]);
+  if (remaining.length <= 1) {
+    endGame();
   } else {
-    document.getElementById("new-round").style.display = "inline-block";
-    document.getElementById("status").textContent = "Partie en cours.";
+    document.getElementById("status").textContent = "Cliquez sur 'Nouvelle manche' pour continuer.";
     roundPending = false;
   }
 }
 
-// --- Bouton nouvelle manche ---
-function newRound() {
-  showRoundForm();
+// --- Fin de la partie ---
+function endGame() {
+  document.getElementById("game").style.display = "none";
+  document.getElementById("end-game").style.display = "block";
+
+  // Trier par score total décroissant
+  const ranking = [...activePlayers].sort((a,b) => {
+    const totalB = scores[b].reduce((a,b) => a + b, 0);
+    const totalA = scores[a].reduce((a,b) => a + b, 0);
+    return totalB - totalA;
+  });
+
+  const ol = document.getElementById("final-ranking");
+  ol.innerHTML = "";
+
+  ranking.forEach(p => {
+    const li = document.createElement("li");
+    const total = scores[p].reduce((a,b) => a + b, 0);
+    li.textContent = `${p} : ${total} points${eliminated[p] ? " (Éliminé)" : ""}`;
+    ol.appendChild(li);
+  });
 }
 
-// --- Initialisation ---
-window.onload = () => {
-  allPlayers = loadAllPlayers();
-  showPlayerSelection();
+// --- Événements ---
+document.getElementById("start-game").addEventListener("click", startGame);
+document.getElementById("new-round").addEventListener("click", showRoundForm);
+document.getElementById("validate-round").addEventListener("click", validateRound);
 
-  document.getElementById("start-game").onclick = startGame;
-  document.getElementById("new-round").onclick = newRound;
-  document.getElementById("validate-round").onclick = validateRound;
-};
+// --- Initialisation ---
+allPlayers = loadAllPlayers();
+showPlayerSelection();

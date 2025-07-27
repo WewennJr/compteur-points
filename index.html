@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Compteur de Points</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <h1>🎲 Compteur de Points</h1>
+
+  <!-- Liste des jeux -->
+  <h2>Choisir un jeu</h2>
+  <ul id="gameList">
+    <li><a href="jeux/uno.html">Tarot Africain</a></li>
+    <!-- On pourra en ajouter d'autres -->
+  </ul>
+
+  <!-- Bouton paramètres -->
+  <button id="settingsBtn">⚙️ Paramètres joueurs</button>
+
+  <!-- Fenêtre modale pour gérer les joueurs -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <h2>Liste des joueurs</h2>
+      <ul id="playerList"></ul>
+
+      <input type="text" id="newPlayer" placeholder="Nom du joueur">
+      <button onclick="addPlayer()">Ajouter</button>
+      <br><br>
+      <button onclick="closeModal()">Fermer</button>
+    </div>
+  </div>
+
+  <script src="js/players.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

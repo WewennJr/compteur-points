@@ -1,119 +1,115 @@
-@import url('https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap');
-
-* {
-  box-sizing: border-box;
-}
-
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #2c3e50, #34495e, #2c3e50);
   color: #fff;
   text-align: center;
   min-height: 100vh;
   margin: 0;
   padding: 20px;
-  font-size: 16px;
 }
 
 h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
 h2 {
+  margin-top: 40px;
   font-size: 1.8rem;
-  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+  display: inline-block;
+  padding-bottom: 5px;
 }
 
+/* Conteneur principal */
 .game-container {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 20px;
   max-width: 800px;
-  margin: 0 auto;
-  padding: 10px;
+  margin: 20px auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-.score-table {
+/* Cacher les sections de jeu par défaut */
+#game, #end-game {
+  display: none;
+}
+
+/* Cacher le bouton nouvelle manche par défaut */
+#new-round {
+  display: none;
+}
+
+/* Table des scores */
+table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
-  display: block;         /* Permet scroll horizontal sur mobile */
-  overflow-x: auto;
+  margin-top: 20px;
 }
 
-.score-table th,
-.score-table td {
-  border: 1px solid #fff;
-  padding: 12px 15px;
-  font-size: 1rem;
-  text-align: center;
-  white-space: nowrap; /* Empêche retour à la ligne dans les cellules */
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
 }
 
+th {
+  background: rgba(255,255,255,0.1);
+}
+
+.eliminated {
+  color: #e74c3c;
+  font-style: italic;
+}
+
+/* Inputs et boutons */
 input[type="number"] {
   padding: 8px;
   border-radius: 8px;
   border: none;
-  margin: 10px auto;
+  margin: 5px;
   text-align: center;
   width: 80px;
-  max-width: 100%;
-  font-size: 1rem;
-  display: block;
-  background-color: #3c5a72;
-  color: #fff;
 }
 
 .btn {
-  width: 90%;
-  max-width: 300px;
-  padding: 12px 0;
-  font-size: 1.1rem;
-  margin: 15px auto;
-  border-radius: 8px;
+  background: #3498db;
+  color: white;
   border: none;
-  background-color: #5dade2;
-  color: #fff;
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  display: block;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s;
 }
 
 .btn:hover {
-  background-color: #2980b9;
+  background: #2980b9;
 }
 
-/* Responsive pour petits écrans */
-@media (max-width: 480px) {
-  body {
-    padding: 10px;
-    font-size: 14px;
-  }
+.btn-danger {
+  background: #e74c3c;
+}
 
-  h1 {
-    font-size: 1.8rem;
-  }
+.btn-danger:hover {
+  background: #c0392b;
+}
 
-  h2 {
-    font-size: 1.4rem;
-  }
+/* Résultat final */
+.final-scoreboard {
+  background: rgba(0,0,0,0.4);
+  border: 2px solid rgba(255,255,255,0.2);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 30px;
+}
 
-  input[type="number"] {
-    width: 60px;
-    font-size: 0.9rem;
-  }
-
-  .btn {
-    width: 100%;
-    font-size: 1rem;
-  }
-
-  .score-table th,
-  .score-table td {
-    padding: 8px 5px;
-    font-size: 0.9rem;
-  }
-
-  .game-container {
-    padding: 5px;
-    max-width: 100%;
-  }
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
 }

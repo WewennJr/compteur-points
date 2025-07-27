@@ -2,27 +2,23 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tarot Africain</title>
 </head>
 <body>
   <h1>Tarot Africain</h1>
 
-  <!-- Choix des joueurs -->
-  <div id="setup">
-    <h2>Configuration</h2>
-    <div id="player-selection"></div>
-    <label>Score de départ : <input type="number" id="start-score" value="20"></label>
-    <button id="start-game">Démarrer la partie</button>
-  </div>
+  <h3>Sélectionnez les joueurs :</h3>
+  <div id="players-list"></div>
 
-  <!-- Tableau des scores -->
-  <div id="game" style="display:none;">
-    <h2>Scores</h2>
-    <table id="score-table" border="1"></table>
-    <button id="new-round">Nouvelle manche</button>
-    <div id="status"></div>
-  </div>
+  <label>Score de départ : <input type="number" id="starting-score" value="50"></label>
+  <br><br>
+  <button onclick="startGame()">Lancer la partie</button>
+  <button onclick="nextTurn()">Tour suivant</button>
 
-  <script src="../js/tarot-africain.js"></script>
+  <h2>Scores :</h2>
+  <table border="1" id="score-table"></table>
+
+  <script src="tarot.js"></script>
 </body>
 </html>

@@ -154,19 +154,21 @@ h2 {
 }
 
 /* Champ d'ajout */
-.add-player {
-  margin: 20px 0;
+.add-player input {
+  width: 100%;          /* Prend toute la largeur disponible */
+  max-width: 400px;     /* Limite la largeur max sur grand écran */
+  box-sizing: border-box; /* Pour inclure padding et bordure dans la largeur */
+  font-size: 1.1rem;    /* Un peu plus gros pour le tactile */
+  padding: 12px;        /* Plus confortable sur mobile */
+  margin-bottom: 15px;  /* Plus d’espace entre les champs */
 }
 
-.add-player input {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  width: 70%;
-  max-width: 300px;
-  margin-bottom: 10px;
-  font-size: 1rem;
+.add-player {
+  padding: 0 15px;      /* Un petit padding horizontal pour ne pas coller aux bords */
+  max-width: 450px;     /* Limite la largeur du conteneur */
+  margin: auto;         /* Centre le conteneur */
 }
+
 
 /* ==== ADAPTATION MOBILE ==== */
 @media (max-width: 600px) {

@@ -64,6 +64,11 @@ th {
   min-width: 80px;
 }
 
+table th, table td {
+  white-space: nowrap; /* empêche le retour à la ligne dans les cellules */
+  font-size: 1rem;     /* taille normale */
+}
+
 .eliminated {
   color: #e74c3c;
   font-style: italic;
@@ -152,5 +157,11 @@ input[type="number"] {
   }
   table {
     font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  table th, table td {
+    font-size: 0.85rem; /* réduit un peu la taille de la police sur mobile */
   }
 }

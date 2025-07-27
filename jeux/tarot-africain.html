@@ -2,44 +2,143 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Tarot Africain</title>
-  <link rel="stylesheet" href="../css/tarot-africain.css">
+  <title>Tarot Africain - Compteur de Points</title>
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #2c3e50, #34495e, #2c3e50);
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+      margin-top: 40px;
+      font-size: 1.8rem;
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    /* Conteneur principal */
+    .game-container {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 800px;
+      margin: 20px auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    /* Table des scores */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    th {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Inputs et boutons */
+    input[type="number"] {
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      margin: 5px;
+      text-align: center;
+      width: 80px;
+    }
+
+    .btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin: 10px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #2980b9;
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+
+    /* Résultat final */
+    .final-scoreboard {
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.2);
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 30px;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+  </style>
 </head>
 <body>
-  <h1>Tarot Africain</h1>
 
-  <!-- Choix des joueurs -->
-  <div id="setup">
-    <h2>Configuration</h2>
-    <div id="player-selection"></div>
-    <label>Score de départ : <input type="number" id="start-score" value="20"></label>
-    <button class="btn" id="start-game">Démarrer la partie</button>
-  </div>
+  <h1>🃏 Tarot Africain</h1>
 
-  <!-- Tableau des scores -->
-  <div id="game" style="display:none;">
-    <h2>Scores</h2>
-    <table id="score-table"></table>
+  <div class="game-container">
+    <h2>Scores en cours</h2>
 
-    <!-- Formulaire nouvelle manche -->
-    <div id="round-form" style="display:none;">
-      <h3>Nouvelle manche</h3>
-      <form id="round-inputs"></form>
-      <button class="btn" id="validate-round">Valider la manche</button>
+    <div id="scoreboard">
+      <!-- Ici le tableau des scores est généré dynamiquement -->
     </div>
 
-    <button class="btn" id="new-round">Nouvelle manche</button>
-    <div id="status"></div>
+    <!-- Boutons pour enregistrer les points et terminer -->
+    <div class="button-group">
+      <button class="btn" onclick="saveRound()">✅ Valider la manche</button>
+      <button class="btn btn-danger" onclick="endGame()">🏆 Terminer la partie</button>
+    </div>
   </div>
 
-  <!-- Classement final -->
-  <div id="end-game" style="display:none;">
-    <h2>Classement final</h2>
-    <ol id="final-ranking"></ol>
-    <button class="btn" onclick="location.reload()">Nouvelle partie</button>
-    <button class="btn" onclick="window.location.href='../index.html'">🏠 Accueil</button>
+  <!-- Zone pour afficher le classement final -->
+  <div id="finalResult" class="final-scoreboard" style="display:none;">
+    <h2>🏆 Classement final</h2>
+    <div id="finalRanking"></div>
+    <div class="button-group">
+      <button class="btn" onclick="location.reload()">🔄 Nouvelle partie</button>
+      <button class="btn" onclick="window.location.href='../index.html'">🏠 Retour à l'accueil</button>
+    </div>
   </div>
 
+  <script src="../js/players.js"></script>
   <script src="../js/tarot-africain.js"></script>
+
 </body>
 </html>

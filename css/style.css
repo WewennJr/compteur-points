@@ -155,22 +155,18 @@ h2 {
 
 /* Champ d'ajout */
 .add-player {
-  margin: 20px auto;
-  max-width: 400px; /* limite la largeur max */
-  padding: 0 15px; /* un petit padding intérieur */
-  box-sizing: border-box; /* pour que padding soit inclus dans la largeur */
+  margin: 20px 0;
 }
 
 .add-player input {
-  width: 100%; /* champs prennent toute la largeur du conteneur */
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
-  margin-bottom: 15px;
+  width: 70%;
+  max-width: 300px;
+  margin-bottom: 10px;
   font-size: 1rem;
-  box-sizing: border-box;
 }
-
 
 /* ==== ADAPTATION MOBILE ==== */
 @media (max-width: 600px) {
@@ -207,11 +203,5 @@ h2 {
   .add-player input {
     width: 90%;
     font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .add-player {
-    max-width: 95%; /* presque toute la largeur sur très petit écran */
   }
 }

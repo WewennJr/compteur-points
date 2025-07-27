@@ -1,8 +1,9 @@
 // --- VARIABLES GLOBALES ---
-let allPlayers = []; // Liste globale des joueurs (vient du localStorage)
-let activePlayers = []; // Joueurs choisis pour cette partie
-let scores = {}; // scores[joueur] = [score initial, ...]
-let eliminated = {}; // joueur -> true si éliminé
+let allPlayers = [];
+let activePlayers = [];
+let scores = {};
+let eliminated = {};
+let roundPending = false;
 
 // --- Récupérer la liste globale des joueurs ---
 function loadAllPlayers() {
@@ -38,7 +39,6 @@ function startGame() {
 
   const startScore = parseInt(document.getElementById("start-score").value) || 20;
 
-  // Initialiser les scores
   scores = {};
   eliminated = {};
   activePlayers.forEach(p => {
@@ -46,10 +46,8 @@ function startGame() {
     eliminated[p] = false;
   });
 
-  // Afficher le tableau initial
   updateScoreTable();
 
-  // Basculer sur la vue "jeu"
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
 }
@@ -59,20 +57,18 @@ function updateScoreTable() {
   const table = document.getElementById("score-table");
   table.innerHTML = "";
 
-  // Ligne d'entête
   const headerRow = document.createElement("tr");
-  headerRow.appendChild(document.createElement("th")); // cellule vide pour les manches
+  headerRow.appendChild(document.createElement("th"));
   activePlayers.forEach(p => {
     const th = document.createElement("th");
     th.textContent = p + (eliminated[p] ? " (Éliminé)" : "");
+    if (eliminated[p]) th.classList.add("eliminated");
     headerRow.appendChild(th);
   });
   table.appendChild(headerRow);
 
-  // Nombre de manches max
   const maxRounds = Math.max(...Object.values(scores).map(s => s.length));
 
-  // Lignes des manches
   for (let r = 0; r < maxRounds; r++) {
     const row = document.createElement("tr");
     const roundCell = document.createElement("td");
@@ -82,13 +78,13 @@ function updateScoreTable() {
     activePlayers.forEach(p => {
       const td = document.createElement("td");
       td.textContent = scores[p][r] !== undefined ? scores[p][r] : "";
+      if (eliminated[p]) td.classList.add("eliminated");
       row.appendChild(td);
     });
 
     table.appendChild(row);
   }
 
-  // Ligne des totaux
   const totalRow = document.createElement("tr");
   const totalLabel = document.createElement("td");
   totalLabel.textContent = "Total";
@@ -98,35 +94,45 @@ function updateScoreTable() {
     const td = document.createElement("td");
     const total = scores[p].reduce((a, b) => a + b, 0);
     td.textContent = total;
-    if (eliminated[p]) td.style.color = "gray";
+    if (eliminated[p]) td.classList.add("eliminated");
     totalRow.appendChild(td);
   });
 
   table.appendChild(totalRow);
 }
 
-// --- Nouvelle manche ---
-function newRound() {
-  const roundInputs = {};
+// --- Créer le formulaire de nouvelle manche ---
+function showRoundForm() {
+  const form = document.getElementById("round-inputs");
+  form.innerHTML = "";
 
-  // Demander le nombre d'échecs par joueur
-  for (const p of activePlayers) {
+  activePlayers.forEach(p => {
     if (!eliminated[p]) {
-      let fails = prompt(`Combien d'échecs pour ${p} ?`, "0");
-      if (fails === null) return; // annuler
-      fails = parseInt(fails) || 0;
-      roundInputs[p] = fails;
-    } else {
-      roundInputs[p] = 0; // pas de points pour les éliminés
+      const label = document.createElement("label");
+      label.innerHTML = `<span>${p}</span> <input type="number" min="0" value="0" name="${p}">`;
+      form.appendChild(label);
     }
-  }
+  });
+
+  document.getElementById("round-form").style.display = "block";
+}
+
+// --- Valider une manche ---
+function validateRound() {
+  const form = document.getElementById("round-inputs");
+  const inputs = form.querySelectorAll("input");
+
+  let roundInputs = {};
+  inputs.forEach(input => {
+    const p = input.name;
+    roundInputs[p] = parseInt(input.value) || 0;
+  });
 
   // Appliquer les pénalités
   for (const p of activePlayers) {
-    const penalty = -1 * roundInputs[p];
+    const penalty = -1 * (roundInputs[p] || 0);
     scores[p].push(penalty);
 
-    // Vérifier élimination
     const total = scores[p].reduce((a, b) => a + b, 0);
     if (total <= 0 && !eliminated[p]) {
       eliminated[p] = true;
@@ -134,8 +140,16 @@ function newRound() {
     }
   }
 
+  document.getElementById("round-form").style.display = "none";
   updateScoreTable();
   checkEndGame();
+}
+
+// --- Nouvelle manche ---
+function newRound() {
+  if (roundPending) return;
+  roundPending = true;
+  showRoundForm();
 }
 
 // --- Vérifier fin de partie ---
@@ -143,23 +157,25 @@ function checkEndGame() {
   const stillAlive = activePlayers.filter(p => !eliminated[p]);
   if (stillAlive.length === 1) {
     const winner = stillAlive[0];
-    alert(`Fin de partie ! ${winner} est le dernier en jeu.`);
+    document.getElementById("game").style.display = "none";
+    document.getElementById("end-game").style.display = "block";
 
-    // Créer un classement final
     const ranking = activePlayers
-      .map(p => {
-        return {
-          name: p,
-          total: scores[p].reduce((a, b) => a + b, 0)
-        };
-      })
+      .map(p => ({
+        name: p,
+        total: scores[p].reduce((a, b) => a + b, 0)
+      }))
       .sort((a, b) => b.total - a.total);
 
-    let msg = "Classement final :\n";
+    const list = document.getElementById("final-ranking");
+    list.innerHTML = "";
     ranking.forEach((r, i) => {
-      msg += `${i + 1}. ${r.name} (${r.total} points)\n`;
+      const li = document.createElement("li");
+      li.textContent = `${r.name} (${r.total} points)`;
+      list.appendChild(li);
     });
-    alert(msg);
+  } else {
+    roundPending = false;
   }
 }
 
@@ -170,4 +186,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("start-game").addEventListener("click", startGame);
   document.getElementById("new-round").addEventListener("click", newRound);
+  document.getElementById("validate-round").addEventListener("click", validateRound);
 });

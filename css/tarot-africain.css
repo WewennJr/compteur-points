@@ -45,23 +45,23 @@ h2 {
 
 /* Table des scores */
 table {
-  width: 80%;            /* prendre 80% de la largeur de son conteneur */
-  max-width: 600px;      /* limite max en largeur */
-  margin: 20px auto;     /* auto pour centrer horizontalement */
+  width: 80%;
+  max-width: 700px;
+  margin: 20px auto;  /* centre horizontalement */
   border-collapse: collapse;
-  margin-top: 20px;
-  overflow-x: auto;
-  display: block; /* Important pour scroll */
+  table-layout: fixed; /* pour forcer les colonnes à s'étaler */
 }
 
 th, td {
-  padding: 8px 6px;
+  padding: 12px;
   border-bottom: 1px solid rgba(255,255,255,0.2);
-  white-space: nowrap; /* Empêche le texte de se casser sur plusieurs lignes */
+  word-wrap: break-word; /* couper les mots trop longs */
+  text-align: center; /* centrer le texte dans les cellules */
 }
 
 th {
   background: rgba(255,255,255,0.1);
+  min-width: 80px;
 }
 
 .eliminated {

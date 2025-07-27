@@ -160,8 +160,22 @@ input[type="number"] {
   }
 }
 
+/* Gestion du tableau scrollable horizontal sur mobile (<480px) */
 @media (max-width: 480px) {
+  /* Scroll horizontal sur le conteneur */
+  .game-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* scroll fluide iOS */
+  }
+
+  table {
+    width: auto !important;      /* supprime largeur fixe */
+    min-width: 600px;            /* minimum largeur pour bonne lisibilité */
+    table-layout: auto !important; /* colonnes taille naturelle */
+  }
+
   table th, table td {
-    font-size: 0.85rem; /* réduit un peu la taille de la police sur mobile */
+    white-space: nowrap;         /* pas de retour à la ligne dans les cellules */
+    font-size: 0.85rem;          /* texte un peu plus petit */
   }
 }

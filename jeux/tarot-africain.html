@@ -8,16 +8,18 @@
 <body>
   <h1>Tarot Africain</h1>
 
-  <!-- Choix des joueurs -->
-  <div id="setup" class="game-container">
+  <!-- Configuration des joueurs -->
+  <div id="setup">
     <h2>Configuration</h2>
     <div id="player-selection"></div>
-    <label>Score de départ : <input type="number" id="start-score" value="20" /></label>
+    <label>
+      Score de départ : <input type="number" id="start-score" value="20" min="1" />
+    </label>
     <button class="btn" id="start-game">Démarrer la partie</button>
   </div>
 
-  <!-- Tableau des scores -->
-  <div id="game" class="game-container" style="display:none;">
+  <!-- Partie jeu -->
+  <div id="game" style="display:none;">
     <h2>Scores</h2>
     <table id="score-table"></table>
 
@@ -25,7 +27,7 @@
     <div id="round-form" style="display:none;">
       <h3>Nouvelle manche</h3>
       <form id="round-inputs"></form>
-      <button class="btn" id="validate-round">Valider la manche</button>
+      <button class="btn" id="validate-round" type="button">Valider la manche</button>
     </div>
 
     <button class="btn" id="new-round" style="display:none;">Nouvelle manche</button>
@@ -33,7 +35,7 @@
   </div>
 
   <!-- Classement final -->
-  <div id="end-game" class="game-container" style="display:none;">
+  <div id="end-game" style="display:none;">
     <h2>Classement final</h2>
     <ol id="final-ranking"></ol>
     <button class="btn" onclick="location.reload()">Nouvelle partie</button>

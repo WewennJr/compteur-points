@@ -3,49 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Tarot Africain</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-
-    h1, h2 {
-      text-align: center;
-    }
-
-    table {
-      border-collapse: collapse;
-      margin: 20px auto;
-      min-width: 400px;
-    }
-
-    th, td {
-      border: 1px solid #aaa;
-      padding: 8px 12px;
-      text-align: center;
-      width: 120px; /* largeur fixe pour éviter l'agrandissement */
-    }
-
-    .elimine {
-      color: gray;
-      font-style: italic;
-    }
-
-    #return-home {
-      display: none;
-      margin: 20px auto;
-      padding: 10px 15px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #return-home:hover {
-      background: #45a049;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/tarot-africain.css">
 </head>
 <body>
   <h1>Tarot Africain</h1>
@@ -55,16 +13,30 @@
     <h2>Configuration</h2>
     <div id="player-selection"></div>
     <label>Score de départ : <input type="number" id="start-score" value="20"></label>
-    <button id="start-game">Démarrer la partie</button>
+    <button class="btn" id="start-game">Démarrer la partie</button>
   </div>
 
   <!-- Tableau des scores -->
   <div id="game" style="display:none;">
     <h2>Scores</h2>
     <table id="score-table"></table>
-    <button id="new-round">Nouvelle manche</button>
+
+    <!-- Formulaire nouvelle manche -->
+    <div id="round-form" style="display:none;">
+      <h3>Nouvelle manche</h3>
+      <form id="round-inputs"></form>
+      <button class="btn" id="validate-round">Valider la manche</button>
+    </div>
+
+    <button class="btn" id="new-round">Nouvelle manche</button>
     <div id="status"></div>
-    <button id="return-home">Retour à l'accueil</button>
+  </div>
+
+  <!-- Classement final -->
+  <div id="end-game" style="display:none;">
+    <h2>Classement final</h2>
+    <ol id="final-ranking"></ol>
+    <button class="btn" onclick="location.reload()">Nouvelle partie</button>
   </div>
 
   <script src="../js/tarot-africain.js"></script>

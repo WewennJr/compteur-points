@@ -33,30 +33,29 @@ h2 {
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-/* Cacher les sections de jeu par défaut */
-#game, #end-game {
-  display: none;
-}
-
-/* Cacher le bouton nouvelle manche par défaut */
-#new-round {
-  display: none;
-}
-
-/* Table des scores */
-table {
-  width: 90%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  margin: 0 auto;
+/* Wrapper scroll horizontal pour la table */
+.table-wrapper {
   overflow-x: auto;
-  display: block; /* Important pour scroll */
+  -webkit-overflow-scrolling: touch;
+  margin-top: 20px;
+  width: 90vw; /* largeur 90% de la fenêtre */
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 600px; /* minimum pour ne pas écraser les colonnes */
 }
 
 th, td {
-  padding: 8px 6px;
+  padding: 8px 10px;
   border-bottom: 1px solid rgba(255,255,255,0.2);
-  white-space: nowrap; /* Empêche le texte de se casser sur plusieurs lignes */
+  white-space: nowrap;
+  text-align: center;
 }
 
 th {
@@ -119,8 +118,8 @@ input[type="number"] {
 }
 
 #final-ranking {
-  list-style-position: inside; /* pour que les numéros soient dedans et centrables */
-  padding-left: 0; /* enlever retrait */
+  list-style-position: inside;
+  padding-left: 0;
   text-align: center;
 }
 
@@ -130,7 +129,7 @@ input[type="number"] {
   font-weight: 600;
 }
 
-/* Pour les petits écrans (<600px), réduire la taille du texte */
+/* Pour petits écrans (<600px), réduire un peu la taille du texte et des inputs */
 @media (max-width: 600px) {
   body {
     padding: 10px;

@@ -45,7 +45,9 @@ h2 {
 
 /* Table des scores */
 table {
-  width: 100%;
+  width: 80%;            /* prendre 80% de la largeur de son conteneur */
+  max-width: 600px;      /* limite max en largeur */
+  margin: 20px auto;     /* auto pour centrer horizontalement */
   border-collapse: collapse;
   margin-top: 20px;
   overflow-x: auto;

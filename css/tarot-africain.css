@@ -113,3 +113,16 @@ input[type="number"] {
   gap: 15px;
   margin-top: 20px;
 }
+
+#final-ranking {
+  list-style-position: inside; /* pour que les numéros soient dedans et centrables */
+  padding-left: 0; /* enlever retrait */
+  text-align: center;
+}
+
+#final-ranking li {
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+

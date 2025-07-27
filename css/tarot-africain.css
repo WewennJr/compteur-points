@@ -31,6 +31,10 @@ h2 {
   max-width: 800px;
   margin: 20px auto;
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+
+  /* Pour scroll horizontal mobile */
+  overflow-x: auto;       /* scroll horizontal activé si contenu trop large */
+  -webkit-overflow-scrolling: touch; /* scroll fluide sur iOS */
 }
 
 /* Cacher les sections de jeu par défaut */
@@ -45,28 +49,25 @@ h2 {
 
 /* Table des scores */
 table {
-  width: 80%;
-  max-width: 700px;
-  margin: 20px auto;  /* centre horizontalement */
+  width: 100%;            /* prendre toute la largeur du conteneur */
+  max-width: none;        /* ne pas limiter la largeur */
+  margin: 20px auto;
   border-collapse: collapse;
-  table-layout: fixed; /* pour forcer les colonnes à s'étaler */
+  table-layout: auto;     /* colonnes à taille naturelle */
+  min-width: 600px;       /* largeur min pour pas casser le texte */
 }
 
 th, td {
   padding: 12px;
   border-bottom: 1px solid rgba(255,255,255,0.2);
-  word-wrap: break-word; /* couper les mots trop longs */
-  text-align: center; /* centrer le texte dans les cellules */
+  text-align: center;
+  white-space: nowrap;    /* éviter les retours à la ligne */
+  font-size: 1rem;
 }
 
 th {
   background: rgba(255,255,255,0.1);
   min-width: 80px;
-}
-
-table th, table td {
-  white-space: nowrap; /* empêche le retour à la ligne dans les cellules */
-  font-size: 1rem;     /* taille normale */
 }
 
 .eliminated {
@@ -137,6 +138,7 @@ input[type="number"] {
 }
 
 /* Pour les petits écrans (<600px), réduire la taille du texte */
+/* Ajustements responsive */
 @media (max-width: 600px) {
   body {
     padding: 10px;
@@ -172,6 +174,7 @@ input[type="number"] {
     width: auto !important;      /* supprime largeur fixe */
     min-width: 600px;            /* minimum largeur pour bonne lisibilité */
     table-layout: auto !important; /* colonnes taille naturelle */
+    font-size: 0.85rem;
   }
 
   table th, table td {

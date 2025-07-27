@@ -2,20 +2,16 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #2c3e50, #34495e, #2c3e50);
   color: #fff;
+  text-align: center;
   min-height: 100vh;
   margin: 0;
   padding: 20px;
-
-  /* Centrage horizontal avec flexbox */
-  display: flex;
-  justify-content: center;
 }
 
 h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
   text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-  text-align: center;
 }
 
 h2 {
@@ -24,7 +20,6 @@ h2 {
   border-bottom: 2px solid rgba(255,255,255,0.2);
   display: inline-block;
   padding-bottom: 5px;
-  text-align: center;
 }
 
 /* Conteneur principal */
@@ -34,36 +29,33 @@ h2 {
   border-radius: 15px;
   padding: 20px;
   max-width: 800px;
-  width: 100%;
+  margin: 20px auto;
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-/* Cacher les sections de jeu par défaut */
-#game, #end-game {
-  display: none;
-}
-
-/* Cacher le bouton nouvelle manche par défaut */
-#new-round {
-  display: none;
-}
-
-/* Table des scores */
-table {
-  max-width: 90vw; /* max 90% de la largeur écran */
-  width: auto;
-  border-collapse: collapse;
-  margin: 0 auto;
+/* Wrapper scroll horizontal pour la table */
+.table-wrapper {
   overflow-x: auto;
-  display: block; /* permet scroll horizontal */
-  white-space: nowrap; /* empêche le retour à la ligne dans cellules */
+  -webkit-overflow-scrolling: touch;
+  margin-top: 20px;
+  width: 90vw; /* largeur 90% de la fenêtre */
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 600px; /* minimum pour ne pas écraser les colonnes */
 }
 
 th, td {
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-bottom: 1px solid rgba(255,255,255,0.2);
-  text-align: center;
   white-space: nowrap;
+  text-align: center;
 }
 
 th {
@@ -126,8 +118,8 @@ input[type="number"] {
 }
 
 #final-ranking {
-  list-style-position: inside; /* numéros centrés */
-  padding-left: 0; /* pas de retrait */
+  list-style-position: inside;
+  padding-left: 0;
   text-align: center;
 }
 
@@ -137,17 +129,7 @@ input[type="number"] {
   font-weight: 600;
 }
 
-/* Sur écrans larges (>600px), table redevient normale et centrée */
-@media (min-width: 600px) {
-  table {
-    display: table;
-    width: 80%;
-    max-width: 700px;
-    overflow-x: visible;
-  }
-}
-
-/* Pour petits écrans (<600px), réduire un peu la taille du texte */
+/* Pour petits écrans (<600px), réduire un peu la taille du texte et des inputs */
 @media (max-width: 600px) {
   body {
     padding: 10px;
@@ -167,12 +149,6 @@ input[type="number"] {
     font-size: 0.9rem;
   }
   table {
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  table th, table td {
     font-size: 0.85rem;
   }
 }

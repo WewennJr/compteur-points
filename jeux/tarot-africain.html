@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tarot Africain - Compteur de Points</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/tarot-africain.css" />
+  <meta charset="UTF-8">
+  <title>Tarot Africain</title>
+  <link rel="stylesheet" href="../css/tarot-africain.css">
 </head>
 <body>
+  <h1>Tarot Africain</h1>
 
-  <h1>🃏 Tarot Africain</h1>
-
-  <div class="game-container">
-    <h2>Scores en cours</h2>
-
-    <div id="scoreboard">
-      <!-- Ici le tableau des scores est généré dynamiquement -->
-    </div>
-
-    <!-- Boutons pour enregistrer les points et terminer -->
-    <div class="button-group">
-      <button class="btn" onclick="saveRound()">✅ Valider la manche</button>
-      <button class="btn btn-danger" onclick="endGame()">🏆 Terminer la partie</button>
-    </div>
+  <!-- Choix des joueurs -->
+  <div id="setup">
+    <h2>Configuration</h2>
+    <div id="player-selection"></div>
+    <label>Score de départ : <input type="number" id="start-score" value="20"></label>
+    <button class="btn" id="start-game">Démarrer la partie</button>
   </div>
 
-  <!-- Zone pour afficher le classement final -->
-  <div id="finalResult" class="final-scoreboard" style="display:none;">
-    <h2>🏆 Classement final</h2>
-    <div id="finalRanking"></div>
-    <div class="button-group">
-      <button class="btn" onclick="location.reload()">🔄 Nouvelle partie</button>
-      <button class="btn" onclick="window.location.href='../index.html'">🏠 Retour à l'accueil</button>
+  <!-- Tableau des scores -->
+  <div id="game" style="display:none;">
+    <h2>Scores</h2>
+    <table id="score-table"></table>
+
+    <!-- Formulaire nouvelle manche -->
+    <div id="round-form" style="display:none;">
+      <h3>Nouvelle manche</h3>
+      <form id="round-inputs"></form>
+      <button class="btn" id="validate-round">Valider la manche</button>
     </div>
+
+    <button class="btn" id="new-round">Nouvelle manche</button>
+    <div id="status"></div>
   </div>
 
-  <script src="../js/players.js"></script>
+  <!-- Classement final -->
+  <div id="end-game" style="display:none;">
+    <h2>Classement final</h2>
+    <ol id="final-ranking"></ol>
+    <button class="btn" onclick="location.reload()">Nouvelle partie</button>
+  </div>
+
   <script src="../js/tarot-africain.js"></script>
-
 </body>
 </html>

@@ -1,43 +1,47 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Tarot Africain</title>
-  <link rel="stylesheet" href="../css/tarot-africain.css">
+  <link rel="stylesheet" href="../css/tarot-africain.css" />
 </head>
 <body>
-  <h1>Tarot Africain</h1>
+  <main>
+    <h1>Tarot Africain</h1>
 
-  <!-- Choix des joueurs -->
-  <div id="setup">
-    <h2>Configuration</h2>
-    <div id="player-selection"></div>
-    <label>Score de départ : <input type="number" id="start-score" value="20"></label>
-    <button class="btn" id="start-game">Démarrer la partie</button>
-  </div>
+    <!-- Choix des joueurs -->
+    <section id="setup">
+      <h2>Configuration</h2>
+      <div id="player-selection"></div>
+      <label for="start-score">Score de départ :</label>
+      <input type="number" id="start-score" value="20" min="1" />
+      <button class="btn" id="start-game">Démarrer la partie</button>
+    </section>
 
-  <!-- Tableau des scores -->
-  <div id="game" style="display:none;">
-    <h2>Scores</h2>
-    <table id="score-table"></table>
+    <!-- Tableau des scores -->
+    <section id="game" class="hidden">
+      <h2>Scores</h2>
+      <table id="score-table" class="score-table"></table>
 
-    <!-- Formulaire nouvelle manche -->
-    <div id="round-form" style="display:none;">
-      <h3>Nouvelle manche</h3>
-      <form id="round-inputs"></form>
-      <button class="btn" id="validate-round">Valider la manche</button>
-    </div>
+      <!-- Formulaire nouvelle manche -->
+      <section id="round-form" class="hidden">
+        <h3>Nouvelle manche</h3>
+        <form id="round-inputs"></form>
+        <button class="btn" id="validate-round">Valider la manche</button>
+      </section>
 
-    <button class="btn" id="new-round">Nouvelle manche</button>
-    <div id="status"></div>
-  </div>
+      <button class="btn" id="new-round">Nouvelle manche</button>
+      <div id="status"></div>
+    </section>
 
-  <!-- Classement final -->
-  <div id="end-game" style="display:none;">
-    <h2>Classement final</h2>
-    <ol id="final-ranking"></ol>
-    <button class="btn" onclick="location.reload()">Nouvelle partie</button>
-  </div>
+    <!-- Classement final -->
+    <section id="end-game" class="hidden">
+      <h2>Classement final</h2>
+      <ol id="final-ranking"></ol>
+      <button class="btn" id="restart-game">Nouvelle partie</button>
+      <button class="btn" id="back-home">Retour à l'accueil</button>
+    </section>
+  </main>
 
   <script src="../js/tarot-africain.js"></script>
 </body>

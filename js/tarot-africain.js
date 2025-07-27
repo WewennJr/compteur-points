@@ -1,16 +1,16 @@
-// --- VARIABLES GLOBALES ---
-let allPlayers = []; 
-let activePlayers = []; 
-let scores = {}; 
+// --- Variables ---
+let allPlayers = [];
+let activePlayers = [];
+let scores = {};
 let eliminated = {};
 
-// --- Récupérer la liste globale des joueurs ---
+// --- Load players depuis localStorage ou défaut ---
 function loadAllPlayers() {
   const saved = localStorage.getItem("players");
   return saved ? JSON.parse(saved) : ["Alice", "Bob", "Charlie", "David"];
 }
 
-// --- Afficher la sélection des joueurs ---
+// --- Affiche choix joueurs ---
 function showPlayerSelection() {
   const container = document.getElementById("player-selection");
   container.innerHTML = "";
@@ -26,17 +26,16 @@ function showPlayerSelection() {
   });
 }
 
-// --- Démarrer la partie ---
+// --- Démarrage partie ---
 function startGame() {
-  const checkboxes = document.querySelectorAll("#player-selection input:checked");
-  activePlayers = Array.from(checkboxes).map(c => c.value);
-
+  const checked = document.querySelectorAll("#player-selection input:checked");
+  activePlayers = Array.from(checked).map(c => c.value);
   if (activePlayers.length < 2) {
     alert("Sélectionne au moins 2 joueurs !");
     return;
   }
-
-  const startScore = parseInt(document.getElementById("start-score").value) || 20;
+  const startScoreInput = document.getElementById("start-score").value;
+  const startScore = parseInt(startScoreInput, 10) || 20;
 
   scores = {};
   eliminated = {};
@@ -46,20 +45,19 @@ function startGame() {
   });
 
   updateScoreTable();
-
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
+
+  console.log("Partie démarrée avec joueurs:", activePlayers, "Score départ:", startScore);
 }
 
-// --- Mettre à jour le tableau des scores ---
+// --- Met à jour tableau des scores ---
 function updateScoreTable() {
   const table = document.getElementById("score-table");
   table.innerHTML = "";
 
-  // Ligne d'entête
   const headerRow = document.createElement("tr");
-  const thEmpty = document.createElement("th");
-  headerRow.appendChild(thEmpty);
+  headerRow.appendChild(document.createElement("th")); // coin vide
 
   activePlayers.forEach(p => {
     const th = document.createElement("th");
@@ -69,10 +67,8 @@ function updateScoreTable() {
   });
   table.appendChild(headerRow);
 
-  // Nombre de manches max
   const maxRounds = Math.max(...Object.values(scores).map(s => s.length));
 
-  // Lignes des manches
   for (let r = 0; r < maxRounds; r++) {
     const row = document.createElement("tr");
     const roundCell = document.createElement("td");
@@ -89,7 +85,7 @@ function updateScoreTable() {
     table.appendChild(row);
   }
 
-  // Ligne des totaux
+  // Ligne total
   const totalRow = document.createElement("tr");
   const totalLabel = document.createElement("td");
   totalLabel.textContent = "Total";
@@ -100,6 +96,7 @@ function updateScoreTable() {
     const total = scores[p].reduce((a, b) => a + b, 0);
     td.textContent = total;
     if (eliminated[p]) td.classList.add("elimine");
+    td.style.textAlign = "right"; // aligner score à droite
     totalRow.appendChild(td);
   });
 
@@ -109,12 +106,11 @@ function updateScoreTable() {
 // --- Nouvelle manche ---
 function newRound() {
   const roundInputs = {};
-
   for (const p of activePlayers) {
     if (!eliminated[p]) {
       let fails = prompt(`Combien d'échecs pour ${p} ?`, "0");
-      if (fails === null) return;
-      fails = parseInt(fails) || 0;
+      if (fails === null) return; // annule prompt = annule manche
+      fails = parseInt(fails, 10) || 0;
       roundInputs[p] = fails;
     } else {
       roundInputs[p] = 0;
@@ -136,40 +132,45 @@ function newRound() {
   checkEndGame();
 }
 
-// --- Vérifier fin de partie ---
+// --- Vérifie si la partie est terminée ---
 function checkEndGame() {
-  const stillAlive = activePlayers.filter(p => !eliminated[p]);
-  if (stillAlive.length === 1) {
-    const winner = stillAlive[0];
+  const alive = activePlayers.filter(p => !eliminated[p]);
+  if (alive.length === 1) {
+    const winner = alive[0];
     alert(`Fin de partie ! ${winner} est le dernier en jeu.`);
 
+    // Classement final trié décroissant
     const ranking = activePlayers
-      .map(p => ({
-        name: p,
-        total: scores[p].reduce((a, b) => a + b, 0)
-      }))
+      .map(p => ({ name: p, total: scores[p].reduce((a, b) => a + b, 0) }))
       .sort((a, b) => b.total - a.total);
 
     let msg = "Classement final :\n\n";
     ranking.forEach((r, i) => {
-      // Alignement plus propre : nom centré, score aligné à droite
       msg += `${i + 1}. ${r.name.padEnd(12, ' ')} | ${String(r.total).padStart(4, ' ')} pts\n`;
     });
-
     alert(msg);
 
-    // Affiche le bouton retour
+    // Masquer bouton nouvelle manche, afficher retour accueil
     document.getElementById("new-round").style.display = "none";
-    document.getElementById("return-home").style.display = "block";
+    const returnBtn = document.getElementById("return-home");
+    returnBtn.style.display = "block";
   }
 }
 
-// --- Retour à l'accueil ---
+// --- Retour accueil ---
 function returnHome() {
   document.getElementById("game").style.display = "none";
   document.getElementById("setup").style.display = "block";
   document.getElementById("new-round").style.display = "inline-block";
   document.getElementById("return-home").style.display = "none";
+
+  // Reset sélection et scores
+  showPlayerSelection();
+  document.getElementById("start-score").value = 20;
+  scores = {};
+  eliminated = {};
+  activePlayers = [];
+  console.log("Retour à l'accueil.");
 }
 
 // --- Initialisation ---
@@ -180,4 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("start-game").addEventListener("click", startGame);
   document.getElementById("new-round").addEventListener("click", newRound);
   document.getElementById("return-home").addEventListener("click", returnHome);
+
+  console.log("Script chargé, prêt !");
 });

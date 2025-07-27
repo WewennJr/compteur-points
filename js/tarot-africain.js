@@ -29,7 +29,6 @@ function showPlayerSelection() {
 
 // --- Démarrer la partie ---
 function startGame() {
-  console.log("Démarrage de la partie");
   const checkboxes = document.querySelectorAll("#player-selection input:checked");
   activePlayers = Array.from(checkboxes).map(c => c.value);
 
@@ -51,12 +50,6 @@ function startGame() {
 
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
-
-  // Affiche le bouton nouvelle manche et status
-  document.getElementById("new-round").style.display = "inline-block";
-  document.getElementById("status").textContent = "Cliquez sur 'Nouvelle manche' pour commencer.";
-  roundPending = false;
-  console.log("Bouton nouvelle manche affiché");
 }
 
 // --- Mettre à jour le tableau des scores ---
@@ -64,9 +57,8 @@ function updateScoreTable() {
   const table = document.getElementById("score-table");
   table.innerHTML = "";
 
-  // Ligne d'entête
   const headerRow = document.createElement("tr");
-  headerRow.appendChild(document.createElement("th")); // case vide en haut à gauche
+  headerRow.appendChild(document.createElement("th"));
   activePlayers.forEach(p => {
     const th = document.createElement("th");
     th.textContent = p + (eliminated[p] ? " (Éliminé)" : "");
@@ -75,7 +67,6 @@ function updateScoreTable() {
   });
   table.appendChild(headerRow);
 
-  // Nombre de manches max (longueur max dans scores)
   const maxRounds = Math.max(...Object.values(scores).map(s => s.length));
 
   for (let r = 0; r < maxRounds; r++) {
@@ -94,7 +85,6 @@ function updateScoreTable() {
     table.appendChild(row);
   }
 
-  // Ligne des totaux
   const totalRow = document.createElement("tr");
   const totalLabel = document.createElement("td");
   totalLabel.textContent = "Total";
@@ -119,97 +109,82 @@ function showRoundForm() {
   activePlayers.forEach(p => {
     if (!eliminated[p]) {
       const label = document.createElement("label");
-      label.style.marginRight = "10px";
-      label.innerHTML = `<span>${p}</span> <input type="number" min="0" value="0" name="${p}">`;
+      label.innerHTML = <span>${p}</span> <input type="number" min="0" value="0" name="${p}">;
       form.appendChild(label);
     }
   });
 
   document.getElementById("round-form").style.display = "block";
-  document.getElementById("new-round").style.display = "none";
-  document.getElementById("status").textContent = "Remplis les scores de la manche puis valide.";
 }
 
 // --- Valider une manche ---
 function validateRound() {
-  if (roundPending) return; // Empêche double validation
-  roundPending = true;
-
   const form = document.getElementById("round-inputs");
   const inputs = form.querySelectorAll("input");
-  const roundScores = {};
 
-  for (const input of inputs) {
-    let val = parseInt(input.value);
-    if (isNaN(val) || val < 0) {
-      alert("Scores invalides. Veuillez entrer des nombres positifs.");
-      roundPending = false;
-      return;
-    }
-    roundScores[input.name] = val;
-  }
-
-  // Ajouter les scores à chaque joueur actif
-  activePlayers.forEach(p => {
-    if (!eliminated[p]) {
-      scores[p].push(roundScores[p] || 0);
-    } else {
-      // Joueurs éliminés ne changent plus
-      scores[p].push(scores[p][scores[p].length -1]);
-    }
+  let roundInputs = {};
+  inputs.forEach(input => {
+    const p = input.name;
+    roundInputs[p] = parseInt(input.value) || 0;
   });
 
-  // Éliminer joueurs avec total <= 0
-  activePlayers.forEach(p => {
-    const total = scores[p].reduce((a,b) => a + b, 0);
+  // Appliquer les pénalités
+  for (const p of activePlayers) {
+    const penalty = -1 * (roundInputs[p] || 0);
+    scores[p].push(penalty);
+
+    const total = scores[p].reduce((a, b) => a + b, 0);
     if (total <= 0 && !eliminated[p]) {
       eliminated[p] = true;
-      alert(`Le joueur ${p} est éliminé !`);
+      alert(${p} est éliminé !);
     }
-  });
+  }
 
-  updateScoreTable();
   document.getElementById("round-form").style.display = "none";
-  document.getElementById("new-round").style.display = "inline-block";
+  updateScoreTable();
+  checkEndGame();
+}
 
-  // Vérifier si la partie est finie
-  const remaining = activePlayers.filter(p => !eliminated[p]);
-  if (remaining.length <= 1) {
-    endGame();
+// --- Nouvelle manche ---
+function newRound() {
+  if (roundPending) return;
+  roundPending = true;
+  showRoundForm();
+}
+
+// --- Vérifier fin de partie ---
+function checkEndGame() {
+  const stillAlive = activePlayers.filter(p => !eliminated[p]);
+  if (stillAlive.length === 1) {
+    const winner = stillAlive[0];
+    document.getElementById("game").style.display = "none";
+    document.getElementById("end-game").style.display = "block";
+
+    const ranking = activePlayers
+      .map(p => ({
+        name: p,
+        total: scores[p].reduce((a, b) => a + b, 0)
+      }))
+      .sort((a, b) => b.total - a.total);
+
+    const list = document.getElementById("final-ranking");
+    list.innerHTML = "";
+    ranking.forEach((r, i) => {
+      const li = document.createElement("li");
+      li.textContent = ${r.name} (${r.total} points);
+      list.appendChild(li);
+    });
   } else {
-    document.getElementById("status").textContent = "Cliquez sur 'Nouvelle manche' pour continuer.";
     roundPending = false;
   }
 }
 
-// --- Fin de la partie ---
-function endGame() {
-  document.getElementById("game").style.display = "none";
-  document.getElementById("end-game").style.display = "block";
-
-  // Trier par score total décroissant
-  const ranking = [...activePlayers].sort((a,b) => {
-    const totalB = scores[b].reduce((a,b) => a + b, 0);
-    const totalA = scores[a].reduce((a,b) => a + b, 0);
-    return totalB - totalA;
-  });
-
-  const ol = document.getElementById("final-ranking");
-  ol.innerHTML = "";
-
-  ranking.forEach(p => {
-    const li = document.createElement("li");
-    const total = scores[p].reduce((a,b) => a + b, 0);
-    li.textContent = `${p} : ${total} points${eliminated[p] ? " (Éliminé)" : ""}`;
-    ol.appendChild(li);
-  });
-}
-
-// --- Événements ---
-document.getElementById("start-game").addEventListener("click", startGame);
-document.getElementById("new-round").addEventListener("click", showRoundForm);
-document.getElementById("validate-round").addEventListener("click", validateRound);
-
 // --- Initialisation ---
-allPlayers = loadAllPlayers();
-showPlayerSelection();
+document.addEventListener("DOMContentLoaded", () => {
+  allPlayers = loadAllPlayers();
+  showPlayerSelection();
+
+  document.getElementById("start-game").addEventListener("click", startGame);
+  document.getElementById("new-round").addEventListener("click", newRound);
+  document.getElementById("validate-round").addEventListener("click", validateRound);
+});

@@ -1,67 +1,100 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #2c3e50, #34495e, #2c3e50);
+  color: #fff;
   text-align: center;
-  background: #f8f8f8;
-  color: #333;
+  min-height: 100vh;
+  margin: 0;
   padding: 20px;
 }
 
 h1 {
-  color: #444;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
-h2, h3 {
+h2 {
+  margin-top: 40px;
+  font-size: 1.8rem;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+/* Conteneur principal */
+.game-container {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 20px auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* Table des scores */
+table {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 20px;
 }
 
-table {
-  margin: 20px auto;
-  border-collapse: collapse;
-  width: 80%;
-  background: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
 th, td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: center;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
 }
 
 th {
-  background: #eee;
+  background: rgba(255,255,255,0.1);
 }
 
-.eliminated {
-  background: #f2f2f2;
-  color: gray;
+/* Inputs et boutons */
+input[type="number"] {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  margin: 5px;
+  text-align: center;
+  width: 80px;
 }
 
 .btn {
-  background: #4caf50;
+  background: #3498db;
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 20px;
   margin: 10px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  border-radius: 5px;
+  transition: background 0.3s;
 }
 
 .btn:hover {
-  background: #45a049;
+  background: #2980b9;
 }
 
-#round-form {
-  background: #fff;
-  margin: 20px auto;
-  padding: 10px;
-  border-radius: 5px;
-  width: 300px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+.btn-danger {
+  background: #e74c3c;
 }
 
-#round-form label {
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+/* Résultat final */
+.final-scoreboard {
+  background: rgba(0,0,0,0.4);
+  border: 2px solid rgba(255,255,255,0.2);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 30px;
+}
+
+.button-group {
   display: flex;
-  justify-content: space-between;
-  margin: 5px 0;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
 }

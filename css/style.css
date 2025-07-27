@@ -8,9 +8,10 @@ body {
   animation: gradientMove 12s ease infinite;
   color: #222;
   text-align: center;
+  /* Responsive font sizing */
+  font-size: 16px;
 }
 
-/* Animation du fond */
 @keyframes gradientMove {
   0% {background-position: 0% 50%;}
   50% {background-position: 100% 50%;}
@@ -19,16 +20,18 @@ body {
 
 .container {
   padding: 50px 20px;
+  max-width: 900px;
+  margin: auto;
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2.5rem; /* 40px approx */
   margin-bottom: 10px;
 }
 
 h2 {
   margin-top: 30px;
-  font-size: 1.6rem;
+  font-size: 1.6rem; /* 25.6px approx */
 }
 
 /* ==== LISTE DES JEUX ==== */
@@ -36,6 +39,7 @@ h2 {
   list-style: none;
   padding: 0;
   margin: 20px auto;
+  max-width: 400px;
 }
 
 #gameList li {
@@ -52,6 +56,9 @@ h2 {
   font-weight: bold;
   transition: 0.3s;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-size: 1.1rem;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 .game-link:hover {
@@ -70,6 +77,7 @@ h2 {
   cursor: pointer;
   margin-top: 20px;
   transition: 0.3s;
+  max-width: 90%;
 }
 
 .btn:hover {
@@ -155,5 +163,45 @@ h2 {
   border-radius: 8px;
   border: 1px solid #ccc;
   width: 70%;
+  max-width: 300px;
   margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* ==== ADAPTATION MOBILE ==== */
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 2rem; /* 32px */
+  }
+
+  h2 {
+    font-size: 1.3rem; /* 20.8px */
+  }
+
+  .container {
+    padding: 30px 15px;
+  }
+
+  #gameList {
+    max-width: 100%;
+  }
+
+  .game-link {
+    padding: 10px 15px;
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+
+  .add-player input {
+    width: 90%;
+    font-size: 0.9rem;
+  }
 }

@@ -48,11 +48,14 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  overflow-x: auto;
+  display: block; /* Important pour scroll */
 }
 
 th, td {
-  padding: 12px;
+  padding: 8px 6px;
   border-bottom: 1px solid rgba(255,255,255,0.2);
+  white-space: nowrap; /* Empêche le texte de se casser sur plusieurs lignes */
 }
 
 th {
@@ -126,3 +129,26 @@ input[type="number"] {
   font-weight: 600;
 }
 
+/* Pour les petits écrans (<600px), réduire la taille du texte */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+  h2 {
+    font-size: 1.4rem;
+  }
+  input[type="number"] {
+    width: 60px;
+    padding: 6px;
+  }
+  .btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  table {
+    font-size: 0.85rem;
+  }
+}

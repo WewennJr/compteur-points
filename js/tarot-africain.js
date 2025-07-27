@@ -50,6 +50,7 @@ function startGame() {
 
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
+  document.getElementById("new-round").style.display = "inline-block";
 }
 
 // --- Mettre à jour le tableau des scores ---
@@ -115,41 +116,45 @@ function showRoundForm() {
   });
 
   document.getElementById("round-form").style.display = "block";
+  document.getElementById("new-round").style.display = "none";
+  roundPending = true;
+  document.getElementById("status").textContent = "Entrez les scores de la manche puis validez.";
 }
 
-// --- Valider une manche ---
+// --- Valider la nouvelle manche ---
 function validateRound() {
-  const form = document.getElementById("round-inputs");
-  const inputs = form.querySelectorAll("input");
-
-  let roundInputs = {};
-  inputs.forEach(input => {
-    const p = input.name;
-    roundInputs[p] = parseInt(input.value) || 0;
-  });
-
-  // Appliquer les pénalités
-  for (const p of activePlayers) {
-    const penalty = -1 * (roundInputs[p] || 0);
-    scores[p].push(penalty);
-
-    const total = scores[p].reduce((a, b) => a + b, 0);
-    if (total <= 0 && !eliminated[p]) {
-      eliminated[p] = true;
-      alert(`${p} est éliminé !`);
-    }
+  if (!roundPending) {
+    alert("Cliquez sur 'Nouvelle manche' pour commencer.");
+    return;
   }
 
-  document.getElementById("round-form").style.display = "none";
-  updateScoreTable();
-  checkEndGame();
-}
+  const inputs = document.querySelectorAll("#round-inputs input");
+  let sum = 0;
+  inputs.forEach(input => {
+    sum += parseInt(input.value) || 0;
+  });
 
-// --- Nouvelle manche ---
-function newRound() {
-  if (roundPending) return;
-  roundPending = true;
-  showRoundForm();
+  if (sum !== 10) {
+    alert("La somme des points doit être égale à 10 !");
+    return;
+  }
+
+  inputs.forEach(input => {
+    const p = input.name;
+    const val = parseInt(input.value) || 0;
+    scores[p].push(val);
+  });
+
+  // Met à jour élimination si total >= 40
+  activePlayers.forEach(p => {
+    const total = scores[p].reduce((a, b) => a + b, 0);
+    if (total >= 40) eliminated[p] = true;
+  });
+
+  updateScoreTable();
+  document.getElementById("round-form").style.display = "none";
+
+  checkEndGame();
 }
 
 // --- Vérifier fin de partie ---
@@ -157,34 +162,30 @@ function checkEndGame() {
   const stillAlive = activePlayers.filter(p => !eliminated[p]);
   if (stillAlive.length === 1) {
     const winner = stillAlive[0];
+    document.getElementById("final-ranking").innerHTML = `<li>${winner} (Gagnant !)</li>`;
     document.getElementById("game").style.display = "none";
     document.getElementById("end-game").style.display = "block";
-
-    const ranking = activePlayers
-      .map(p => ({
-        name: p,
-        total: scores[p].reduce((a, b) => a + b, 0)
-      }))
-      .sort((a, b) => b.total - a.total);
-
-    const list = document.getElementById("final-ranking");
-    list.innerHTML = "";
-    ranking.forEach((r, i) => {
-      const li = document.createElement("li");
-      li.textContent = `${r.name} (${r.total} points)`;
-      list.appendChild(li);
-    });
+    document.getElementById("new-round").style.display = "none";
+    document.getElementById("status").textContent = "";
+    roundPending = false;
   } else {
+    document.getElementById("new-round").style.display = "inline-block";
+    document.getElementById("status").textContent = "Partie en cours.";
     roundPending = false;
   }
 }
 
+// --- Bouton nouvelle manche ---
+function newRound() {
+  showRoundForm();
+}
+
 // --- Initialisation ---
-document.addEventListener("DOMContentLoaded", () => {
+window.onload = () => {
   allPlayers = loadAllPlayers();
   showPlayerSelection();
 
-  document.getElementById("start-game").addEventListener("click", startGame);
-  document.getElementById("new-round").addEventListener("click", newRound);
-  document.getElementById("validate-round").addEventListener("click", validateRound);
-});
+  document.getElementById("start-game").onclick = startGame;
+  document.getElementById("new-round").onclick = newRound;
+  document.getElementById("validate-round").onclick = validateRound;
+};

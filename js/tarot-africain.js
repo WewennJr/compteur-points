@@ -57,7 +57,6 @@ function updateScoreTable() {
   const table = document.getElementById("score-table");
   table.innerHTML = "";
 
-  // Ligne d’en-tête
   const headerRow = document.createElement("tr");
   headerRow.appendChild(document.createElement("th"));
   activePlayers.forEach(p => {
@@ -70,7 +69,6 @@ function updateScoreTable() {
 
   const maxRounds = Math.max(...Object.values(scores).map(s => s.length));
 
-  // Lignes des manches
   for (let r = 0; r < maxRounds; r++) {
     const row = document.createElement("tr");
     const roundCell = document.createElement("td");
@@ -87,7 +85,6 @@ function updateScoreTable() {
     table.appendChild(row);
   }
 
-  // Ligne des totaux
   const totalRow = document.createElement("tr");
   const totalLabel = document.createElement("td");
   totalLabel.textContent = "Total";
@@ -112,9 +109,8 @@ function showRoundForm() {
   activePlayers.forEach(p => {
     if (!eliminated[p]) {
       const label = document.createElement("label");
-      label.innerHTML = `<span>${p}</span> <input type="number" min="0" value="0" name="${p}">`;
+      label.innerHTML = <span>${p}</span> <input type="number" min="0" value="0" name="${p}">;
       form.appendChild(label);
-      form.appendChild(document.createElement("br"));
     }
   });
 
@@ -132,17 +128,15 @@ function validateRound() {
     roundInputs[p] = parseInt(input.value) || 0;
   });
 
-  // Appliquer les pénalités (points en négatif)
+  // Appliquer les pénalités
   for (const p of activePlayers) {
-    if (!eliminated[p]) {
-      const penalty = -(roundInputs[p] || 0); // Toujours en négatif
-      scores[p].push(penalty);
+    const penalty = -1 * (roundInputs[p] || 0);
+    scores[p].push(penalty);
 
-      const total = scores[p].reduce((a, b) => a + b, 0);
-      if (total <= 0 && !eliminated[p]) {
-        eliminated[p] = true;
-        alert(`${p} est éliminé !`);
-      }
+    const total = scores[p].reduce((a, b) => a + b, 0);
+    if (total <= 0 && !eliminated[p]) {
+      eliminated[p] = true;
+      alert(${p} est éliminé !);
     }
   }
 
@@ -175,9 +169,9 @@ function checkEndGame() {
 
     const list = document.getElementById("final-ranking");
     list.innerHTML = "";
-    ranking.forEach(r => {
+    ranking.forEach((r, i) => {
       const li = document.createElement("li");
-      li.textContent = `${r.name} (${r.total} points)`;
+      li.textContent = ${r.name} (${r.total} points);
       list.appendChild(li);
     });
   } else {

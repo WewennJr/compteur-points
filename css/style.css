@@ -209,3 +209,9 @@ h2 {
     font-size: 0.9rem;
   }
 }
+
+@media (max-width: 480px) {
+  .add-player {
+    max-width: 95%; /* presque toute la largeur sur très petit écran */
+  }
+}

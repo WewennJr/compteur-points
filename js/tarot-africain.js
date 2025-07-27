@@ -50,9 +50,6 @@ function startGame() {
 
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
-
-  // On affiche le bouton pour la première manche
-  document.getElementById("new-round").style.display = "inline-block";
 }
 
 // --- Mettre à jour le tableau des scores ---
@@ -112,12 +109,8 @@ function showRoundForm() {
   activePlayers.forEach(p => {
     if (!eliminated[p]) {
       const label = document.createElement("label");
-      label.innerHTML = `
-        <span style="display:inline-block;width:100px;text-align:right;">${p} :</span>
-        <input type="number" min="0" value="0" name="${p}">
-      `;
+      label.innerHTML = <span>${p}</span> <input type="number" min="0" value="0" name="${p}">;
       form.appendChild(label);
-      form.appendChild(document.createElement("br"));
     }
   });
 
@@ -143,39 +136,27 @@ function validateRound() {
     const total = scores[p].reduce((a, b) => a + b, 0);
     if (total <= 0 && !eliminated[p]) {
       eliminated[p] = true;
-      alert(`${p} est éliminé !`);
+      alert(${p} est éliminé !);
     }
   }
 
   document.getElementById("round-form").style.display = "none";
   updateScoreTable();
   checkEndGame();
-
-  // Réaffiche le bouton pour une nouvelle manche (si la partie n’est pas finie)
-  if (!isGameOver()) {
-    document.getElementById("new-round").style.display = "inline-block";
-    roundPending = false;
-  }
 }
 
 // --- Nouvelle manche ---
 function newRound() {
   if (roundPending) return;
   roundPending = true;
-  document.getElementById("new-round").style.display = "none";
   showRoundForm();
-}
-
-// --- Vérifier si la partie est finie ---
-function isGameOver() {
-  const stillAlive = activePlayers.filter(p => !eliminated[p]);
-  return stillAlive.length <= 1;
 }
 
 // --- Vérifier fin de partie ---
 function checkEndGame() {
-  if (isGameOver()) {
-    const winner = activePlayers.find(p => !eliminated[p]);
+  const stillAlive = activePlayers.filter(p => !eliminated[p]);
+  if (stillAlive.length === 1) {
+    const winner = stillAlive[0];
     document.getElementById("game").style.display = "none";
     document.getElementById("end-game").style.display = "block";
 
@@ -188,11 +169,13 @@ function checkEndGame() {
 
     const list = document.getElementById("final-ranking");
     list.innerHTML = "";
-    ranking.forEach((r) => {
+    ranking.forEach((r, i) => {
       const li = document.createElement("li");
-      li.textContent = `${r.name} (${r.total} points)`;
+      li.textContent = ${r.name} (${r.total} points);
       list.appendChild(li);
     });
+  } else {
+    roundPending = false;
   }
 }
 

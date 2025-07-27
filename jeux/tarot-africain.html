@@ -1,43 +1,26 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Tarot Africain</title>
 </head>
 <body>
-  <h1>Tarot Africain - Compteur de points</h1>
+  <h1>Tarot Africain</h1>
 
+  <!-- Choix des joueurs -->
   <div id="setup">
-    <label for="player-select">Choisir les joueurs (Ctrl+clic ou Cmd+clic pour plusieurs) :</label><br />
-    <select id="player-select" multiple size="6">
-      <option value="Alice">Alice</option>
-      <option value="Bob">Bob</option>
-      <option value="Carla">Carla</option>
-      <option value="David">David</option>
-      <option value="Eve">Eve</option>
-    </select><br /><br />
-
-    <label for="start-score">Score de départ :</label>
-    <input type="number" id="start-score" value="10" min="1" /><br /><br />
-
-    <button id="start-game-btn">Lancer la partie</button>
+    <h2>Configuration</h2>
+    <div id="player-selection"></div>
+    <label>Score de départ : <input type="number" id="start-score" value="20"></label>
+    <button id="start-game">Démarrer la partie</button>
   </div>
 
-  <div id="game-area" style="display:none;">
-    <table id="score-table" border="1" style="border-collapse: collapse; margin-top: 1em;"></table>
-
-    <div id="message" style="white-space: pre-wrap; margin-top: 1em; color: red;"></div>
-
-    <button id="new-round-btn" disabled style="margin-top: 1em;">Nouvelle manche</button>
-
-    <form id="round-form" style="display:none; margin-top: 1em;">
-      <div id="failures-inputs"></div>
-      <button type="button" id="submit-round-btn">Valider la manche</button>
-    </form>
-
-    <button id="end-game-btn" style="margin-top: 1em;">Finir la partie</button>
-
-    <div id="ranking" style="white-space: pre-wrap; margin-top: 1em; font-weight: bold;"></div>
+  <!-- Tableau des scores -->
+  <div id="game" style="display:none;">
+    <h2>Scores</h2>
+    <table id="score-table" border="1"></table>
+    <button id="new-round">Nouvelle manche</button>
+    <div id="status"></div>
   </div>
 
   <script src="../js/tarot-africain.js"></script>

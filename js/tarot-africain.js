@@ -1,209 +1,205 @@
+// tarot-africain.js
+
+// Variables globales
+let players = [];
+let scores = {};
+let eliminated = {};
+let startScore = 10;
+let gameStarted = false;
+
+// Références DOM
+const setupDiv = document.getElementById("setup");
+const gameArea = document.getElementById("game-area");
 const playerSelect = document.getElementById("player-select");
 const startScoreInput = document.getElementById("start-score");
 const startGameBtn = document.getElementById("start-game-btn");
-const gameArea = document.getElementById("game-area");
 const scoreTable = document.getElementById("score-table");
-const roundForm = document.getElementById("round-form");
-const failuresInputs = document.getElementById("failures-inputs");
-const submitRoundBtn = document.getElementById("submit-round-btn");
-const newRoundBtn = document.getElementById("new-round-btn");
 const messageDiv = document.getElementById("message");
-const rankingDiv = document.getElementById("ranking");
+const newRoundBtn = document.getElementById("new-round-btn");
+const roundForm = document.getElementById("round-form");
+const failuresInputsDiv = document.getElementById("failures-inputs");
+const submitRoundBtn = document.getElementById("submit-round-btn");
 const endGameBtn = document.getElementById("end-game-btn");
+const rankingDiv = document.getElementById("ranking");
 
-let activePlayers = [];
-let scores = {};
-let eliminated = {};
-
-function createScoreTable() {
-  scoreTable.innerHTML = "";
-
-  // Header row avec noms joueurs
-  const headerRow = document.createElement("tr");
-  activePlayers.forEach(player => {
-    const th = document.createElement("th");
-    th.textContent = player;
-    headerRow.appendChild(th);
-  });
-  scoreTable.appendChild(headerRow);
-
-  // 10 lignes de scores initialisées à 0
-  for (let i = 0; i < 10; i++) {
-    const tr = document.createElement("tr");
-    activePlayers.forEach(player => {
-      const td = document.createElement("td");
-      td.textContent = scores[player] && scores[player][i] !== undefined ? scores[player][i] : "";
-      tr.appendChild(td);
-    });
-    scoreTable.appendChild(tr);
-  }
-
-  // Ligne total des scores
-  const totalRow = document.createElement("tr");
-  activePlayers.forEach(player => {
-    const td = document.createElement("td");
-    const total = scores[player] ? scores[player].reduce((a,b) => a+b, 0) : 0;
-    td.textContent = total;
-    totalRow.appendChild(td);
-  });
-  scoreTable.appendChild(totalRow);
-}
-
-function updateTableAfterRound(failures) {
-  activePlayers.forEach(player => {
-    if (!scores[player]) scores[player] = [];
-    // -1 point par échec
-    scores[player].push(-failures[player]);
-  });
-}
-
-function checkEliminations() {
-  activePlayers.forEach(player => {
-    const total = scores[player].reduce((a,b) => a+b, 0);
-    if (total <= 0 && !eliminated[player]) {
-      eliminated[player] = true;
-      messageDiv.textContent += `\n${player} est éliminé !`;
-    }
-  });
-}
-
-function checkForWinner() {
-  const remaining = activePlayers.filter(p => !eliminated[p]);
-  if (remaining.length === 1) {
-    rankingDiv.textContent = "Classement final :\n";
-    // Les joueurs éliminés en dernier à premier
-    const eliminatedOrder = Object.keys(eliminated).reverse();
-    eliminatedOrder.forEach((p, i) => {
-      rankingDiv.textContent += `${i+2}e: ${p}\n`;
-    });
-    rankingDiv.textContent += `1er: ${remaining[0]}`;
-    return true;
-  }
-  return false;
-}
-
-function startGame() {
-  const selectedOptions = Array.from(playerSelect.selectedOptions);
-  if (selectedOptions.length === 0) {
-    alert("Veuillez sélectionner au moins un joueur.");
+// Démarrer la partie
+startGameBtn.addEventListener("click", () => {
+  // Récupérer joueurs sélectionnés
+  players = Array.from(playerSelect.selectedOptions).map(opt => opt.value);
+  if (players.length < 2) {
+    alert("Veuillez sélectionner au moins 2 joueurs.");
     return;
   }
-
-  activePlayers = selectedOptions.map(opt => opt.value);
-  const startScore = parseInt(startScoreInput.value, 10);
+  startScore = parseInt(startScoreInput.value);
   if (isNaN(startScore) || startScore <= 0) {
-    alert("Veuillez entrer un score de départ valide (> 0).");
+    alert("Score de départ invalide.");
     return;
   }
+  initGame();
+});
 
-  // Initialiser les scores
+// Initialisation de la partie
+function initGame() {
+  // Initialiser scores et état
   scores = {};
-  activePlayers.forEach(player => {
-    scores[player] = [startScore];
-  });
   eliminated = {};
+  players.forEach(p => {
+    scores[p] = [startScore]; // tableau des scores par manche
+    eliminated[p] = false;
+  });
+
+  // Afficher / cacher les zones
+  setupDiv.style.display = "none";
+  gameArea.style.display = "block";
   messageDiv.textContent = "";
   rankingDiv.textContent = "";
-
-  createScoreTable();
-
-  // Désactiver les entrées de sélection et de score
-  playerSelect.disabled = true;
-  startScoreInput.disabled = true;
-  startGameBtn.disabled = true;
-
-  // Afficher la zone de jeu
-  gameArea.style.display = "block";
+  newRoundBtn.disabled = false;
   roundForm.style.display = "none";
 
-  newRoundBtn.disabled = false;
+  renderScoreTable();
+
+  gameStarted = true;
 }
 
-function newRound() {
+// Affichage tableau scores
+function renderScoreTable() {
+  // En-tête
+  let html = "<thead><tr><th>Manche</th>";
+  players.forEach(p => {
+    html += `<th>${p}</th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  // Nombre de manches = longueur des tableaux score (ils sont tous égaux)
+  const rounds = scores[players[0]].length;
+
+  for (let i = 0; i < rounds; i++) {
+    html += `<tr><td>${i + 1}</td>`;
+    players.forEach(p => {
+      let val = scores[p][i];
+      if (eliminated[p] && i === rounds - 1) {
+        val += " (éliminé)";
+      }
+      html += `<td>${val}</td>`;
+    });
+    html += "</tr>";
+  }
+
+  // Ligne total (somme des scores actuels)
+  html += "<tr><td><strong>Total</strong></td>";
+  players.forEach(p => {
+    const total = scores[p][scores[p].length - 1];
+    html += `<td><strong>${total}</strong></td>`;
+  });
+  html += "</tr></tbody>";
+
+  scoreTable.innerHTML = html;
+}
+
+// Bouton nouvelle manche
+newRoundBtn.addEventListener("click", () => {
+  if (!gameStarted) return;
+
+  // Afficher le formulaire de saisie des échecs pour chaque joueur pas éliminé
+  failuresInputsDiv.innerHTML = "";
+  players.forEach(p => {
+    if (!eliminated[p]) {
+      failuresInputsDiv.innerHTML += `
+        <label>${p} nombre d'échecs :
+          <input type="number" min="0" max="${scores[p][scores[p].length - 1]}" value="0" name="fail-${p}" />
+        </label><br />`;
+    }
+  });
   roundForm.style.display = "block";
-  failuresInputs.innerHTML = "";
-
-  activePlayers.forEach(player => {
-    if (!eliminated[player]) {
-      const label = document.createElement("label");
-      label.textContent = `${player} échecs : `;
-      const input = document.createElement("input");
-      input.type = "number";
-      input.min = 0;
-      input.max = 10;
-      input.value = 0;
-      input.name = player;
-      label.appendChild(input);
-      failuresInputs.appendChild(label);
-      failuresInputs.appendChild(document.createElement("br"));
-    }
-  });
-
   newRoundBtn.disabled = true;
-}
+  messageDiv.textContent = "Saisissez le nombre d'échecs pour chaque joueur puis validez la manche.";
+  submitRoundBtn.disabled = false;
+});
 
-function submitRound() {
-  const inputs = failuresInputs.querySelectorAll("input");
-  const failures = {};
-  let valid = true;
+// Valider la manche
+submitRoundBtn.addEventListener("click", () => {
+  // Lire les échecs et calculer nouveaux scores
+  let hasError = false;
+  const newScores = {};
 
-  inputs.forEach(input => {
-    const val = parseInt(input.value, 10);
-    if (isNaN(val) || val < 0) {
-      valid = false;
+  players.forEach(p => {
+    if (!eliminated[p]) {
+      const input = roundForm.querySelector(`input[name="fail-${p}"]`);
+      if (!input) return;
+      const fails = parseInt(input.value);
+      if (isNaN(fails) || fails < 0 || fails > scores[p][scores[p].length - 1]) {
+        alert(`Nombre d'échecs invalide pour ${p}.`);
+        hasError = true;
+      } else {
+        newScores[p] = scores[p][scores[p].length - 1] - fails;
+      }
     } else {
-      failures[input.name] = val;
+      newScores[p] = scores[p][scores[p].length - 1];
     }
   });
 
-  if (!valid) {
-    alert("Veuillez entrer des nombres valides pour les échecs.");
-    return;
-  }
+  if (hasError) return;
 
-  updateTableAfterRound(failures);
-  createScoreTable();
-  checkEliminations();
+  // Mise à jour scores et état élimination
+  players.forEach(p => {
+    scores[p].push(newScores[p]);
+    if (newScores[p] <= 0) {
+      eliminated[p] = true;
+    }
+  });
 
-  if (checkForWinner()) {
-    roundForm.style.display = "none";
+  roundForm.style.display = "none";
+  newRoundBtn.disabled = false;
+  messageDiv.textContent = "";
+  renderScoreTable();
+
+  // Vérifier fin de partie (1 seul joueur non éliminé)
+  const alivePlayers = players.filter(p => !eliminated[p]);
+  if (alivePlayers.length === 1) {
+    // Afficher classement
+    gameStarted = false;
     newRoundBtn.disabled = true;
-  } else {
-    roundForm.style.display = "none";
-    newRoundBtn.disabled = false;
+    messageDiv.textContent = "La partie est terminée !";
+    showRanking();
   }
+});
+
+// Afficher classement final
+function showRanking() {
+  // Trier joueurs par score final décroissant
+  const ranking = [...players].sort((a, b) => scores[b][scores[b].length - 1] - scores[a][scores[a].length - 1]);
+  let text = "Classement final :\n";
+  ranking.forEach((p, i) => {
+    text += `${i + 1}. ${p} - ${scores[p][scores[p].length - 1]} points\n`;
+  });
+  rankingDiv.textContent = text;
 }
 
-function endGame() {
-  // Réactiver la sélection
-  playerSelect.disabled = false;
-  startScoreInput.disabled = false;
-  startGameBtn.disabled = false;
+// Bouton Finir la partie
+endGameBtn.addEventListener("click", () => {
+  resetGame();
+});
 
-  // Cacher la zone de jeu
+// Fonction reset complète
+function resetGame() {
+  players = [];
+  scores = {};
+  eliminated = {};
+  gameStarted = false;
+  messageDiv.textContent = "";
+  rankingDiv.textContent = "";
+  failuresInputsDiv.innerHTML = "";
+  roundForm.style.display = "none";
+  newRoundBtn.disabled = true;
+  scoreTable.innerHTML = "";
+
+  // Montrer zone setup, cacher jeu
+  setupDiv.style.display = "block";
   gameArea.style.display = "none";
 
-  // Réinitialiser variables
-  activePlayers = [];
-  scores = {};
-  eliminated = {};
+  // Déselectionner joueurs
+  Array.from(playerSelect.options).forEach(opt => (opt.selected = false));
 
-  // Nettoyer la table, le formulaire et le message
-  scoreTable.innerHTML = "";
-  failuresInputs.innerHTML = "";
-  roundForm.style.display = "none";
-  messageDiv.textContent = "";
-  rankingDiv.textContent = "";
-
-  // Réactiver bouton nouvelle manche
-  newRoundBtn.disabled = false;
+  // Remettre valeur start score à 10 par défaut
+  startScoreInput.value = 10;
 }
-
-startGameBtn.addEventListener("click", startGame);
-newRoundBtn.addEventListener("click", newRound);
-submitRoundBtn.addEventListener("click", submitRound);
-endGameBtn.addEventListener("click", endGame);
-
-// Au début, cacher la zone de jeu
-gameArea.style.display = "none";
-roundForm.style.display = "none";

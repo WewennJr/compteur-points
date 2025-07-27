@@ -1,42 +1,159 @@
+/* ==== STYLE GLOBAL ==== */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #3f87a6, #ebf8e1, #f69d3c);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+  color: #222;
   text-align: center;
-  background: #f5f5f5;
-  padding: 20px;
+}
+
+/* Animation du fond */
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+.container {
+  padding: 50px 20px;
 }
 
 h1 {
-  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
 }
 
-ul {
+h2 {
+  margin-top: 30px;
+  font-size: 1.6rem;
+}
+
+/* ==== LISTE DES JEUX ==== */
+#gameList {
   list-style: none;
   padding: 0;
+  margin: 20px auto;
 }
 
-ul li {
-  margin: 10px 0;
+#gameList li {
+  margin: 15px 0;
 }
 
-button {
-  margin: 5px;
-  padding: 8px 15px;
+.game-link {
+  display: inline-block;
+  text-decoration: none;
+  background: #fff;
+  color: #333;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-weight: bold;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.game-link:hover {
+  background: #333;
+  color: #fff;
+}
+
+/* ==== BOUTONS ==== */
+.btn {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
+  margin-top: 20px;
+  transition: 0.3s;
 }
 
-/* Modale paramètres */
+.btn:hover {
+  background: #555;
+}
+
+.btn.small {
+  padding: 8px 15px;
+  font-size: 0.9rem;
+}
+
+.btn.secondary {
+  background: #999;
+}
+
+.btn.secondary:hover {
+  background: #777;
+}
+
+/* ==== MODALE ==== */
 .modal {
-  display: none;
+  display: none; /* Cachée par défaut */
   position: fixed;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(3px);
 }
 
 .modal-content {
   background: white;
-  padding: 20px;
-  margin: 10% auto;
-  width: 300px;
-  border-radius: 10px;
+  margin: 8% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  text-align: center;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.modal-content li {
+  background: #f0f0f0;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #666;
+  transition: 0.3s;
+}
+
+.close:hover {
+  color: #000;
+}
+
+/* Champ d'ajout */
+.add-player {
+  margin: 20px 0;
+}
+
+.add-player input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 70%;
+  margin-bottom: 10px;
 }
